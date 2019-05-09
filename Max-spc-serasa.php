@@ -7,8 +7,10 @@ include('config.php');
 $resultado = file_get_contents('debug/debug_upcredja2.json');
 
 $resultado = json_decode($resultado, true);
-//print_r($resultado);
-//die;
+
+print_r($resultado);
+die;
+
 $identificacao     = $resultado['identificacao'];
 $endereco          = $resultado['endereco'];
 $enderecoanterior  = $resultado['enderecosInformadosAnteriormente'];
