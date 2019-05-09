@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="pt-br">
+    <title>Max SPC/SERASA</title>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css.css">
+    <script type="text/javascript">
+    var error = 0;
+    function main() {
+        $("#alertIndisponivel").hide();
+        $("#alertDocInvalido").hide();
+        $("#alertNadaEncontrado").hide();
+        $('#result').hide();
+        $("#lay").show();
+        $("#limits").show();
+        var main = '<div class="input-group"><input type="text" name="dados" id="dados" class="form-control" placeholder="Digite o CPF"><span class="input-group-btn"><button class="btn btn-default" type="button" onclick="Pesquisar();">Pesquisar<\/button><\/span><\/div>';
+        $("#frm").html(main);
+    }
+
+    function go(doc, callback) {
+
+        $.ajax({
+            method : "POST",
+            url : '../Max-spc-serasa.php',
+            data: { dados: doc },
+            timeout: 10000,
+            dataType: "json"
+        })
+        .done(function(res) {
+
+            if(res.length < 50) {
+                    callback({msg:'nadaencontrado'});
+            }
+            if(res.msg) {
+                if(res.msg === 'reload') {
+                        callback({msg:'reload'});
+                }else if(res.msg === 'fail') {
+                        callback({msg:'fail'});
+                }else if(res.msg === 'invalido') {
+                        callback({msg:'invalido'});
+                }else if(res.msg === 'nadaencontrado') {
+                        callback({msg:'nadaencontrado'});
+                }else{
+                        callback(res);
+                }
+            } else {
+                callback(res);
+            }
+        })
+        .fail(function() {
+            callback({msg:'reload'});
+        });
+    };
+
+    function Pesquisar() {
+        $("#lay").show();
+        $("#alertIndisponivel").hide();
+        $("#alertDocInvalido").hide();
+        $("#alertNadaEncontrado").hide();
+        $('#result').hide();
+        $("#loading").show();
+        $("#limits").hide();
+        var doc = $("#dados").val();
+
+        if(doc.length < 4) {
+            $("#loading").hide();
+            $("#alertIndisponivel").hide();
+            $("#alertNadaEncontrado").hide();
+            $("#alertDocInvalido").show();
+        } else {
+            go(doc, function(res) {
+
+                console.log(res);
+
+                if(error > 2) {
+                    error=0;
+                    $("#loading").hide();
+                    $("#alertIndisponivel").show();
+                    $("#alertNadaEncontrado").hide();
+                    $("#alertDocInvalido").hide();
+                    return;
+                }else if(res.msg) {
+                    if(res.msg === 'reload') {
+                        error++;
+                        Pesquisar();
+                    }else if(res.msg === 'nadaencontrado') {
+                        $("#loading").hide();
+                        $("#alertIndisponivel").hide();
+                        $("#alertNadaEncontrado").show();
+                        $("#alertDocInvalido").hide();
+                        return;
+                    }else{
+                        error++;
+                        Pesquisar();
+                    }
+                }else if(res.dados) {
+                    error=0;
+                    $("#loading").hide();
+                    $("#lay").hide();
+                    $("#result").html(res.dados);
+                    $('#result').show();
+                
+                } else {
+                    $("#alertDocInvalido").hide();
+                    $("#alertNadaEncontrado").hide();
+                    $('#result').hide();
+                    $("#lay").show();
+                    $("#alertIndisponivel").show();
+                    return;
+                }
+            });
+        }
+    }
+
+    $(document).ready(function() {
+        setTimeout(function explode(){ $("#dados").focus(); }, 100);
+        $('#frmPes').submit( function(e) {
+            Pesquisar();
+            e.preventDefault();
+                });
+    });
+
+    </script>
+</head>
+<body onload="main();" class="box-wrapper">
+    <div class="container-fluid">
+        <div class="appOriginal">
+            <div id="lay">
+                <div>
+                    <div>
+                        <center>
+                            <img id="log" src="./img/max-spc-serasa.png"><br>
+                        </center>
+                    </div>
+                    <form action="" method="post" name="frmPes" id="frmPes">
+                        <div class="row" id="frm"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="result"></div>
+    </div><br>
+    <br>
+    <div style="overflow: hidden;">
+        <div class="row" id="alerts">
+            <div class="alert alert-danger alert-dismissible" id="alertDocInvalido">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a> <strong>Ops!</strong> O CPF
+                informado é invalido.
+            </div>
+            <div class="alert alert-info alert-dismissible" id="alertIndisponivel">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a> <strong>Atençāo!</strong>
+                Sistema indisponivel no momento, tente novamente em breve!
+            </div>
+            <div class="alert alert-warning alert-dismissible" id="alertNadaEncontrado">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a> <strong>Atençāo!</strong> Nada
+                encontrado
+            </div>
+        </div>
+        <div class="row" id="loading">
+            <center>
+                <span><img src=
+                "data:image/gif;base64,R0lGODlhKwALAPEAAP///wAAAIKCggAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAKwALAAACMoSOCMuW2diD88UKG95W88uF4DaGWFmhZid93pq+pwxnLUnXh8ou+sSz+T64oCAyTBUAACH5BAkKAAAALAAAAAArAAsAAAI9xI4IyyAPYWOxmoTHrHzzmGHe94xkmJifyqFKQ0pwLLgHa82xrekkDrIBZRQab1jyfY7KTtPimixiUsevAAAh+QQJCgAAACwAAAAAKwALAAACPYSOCMswD2FjqZpqW9xv4g8KE7d54XmMpNSgqLoOpgvC60xjNonnyc7p+VKamKw1zDCMR8rp8pksYlKorgAAIfkECQoAAAAsAAAAACsACwAAAkCEjgjLltnYmJS6Bxt+sfq5ZUyoNJ9HHlEqdCfFrqn7DrE2m7Wdj/2y45FkQ13t5itKdshFExC8YCLOEBX6AhQAADsAAAAAAAAAAAA="
+                title="Aguarde.." alt="Aguarde..."></span>
+            </center>
+        </div>
+        <div class="row" id="limits">
+            <center>
+                <h6>LIMITE: <strong> 0</strong> - USADO: <strong> 0</strong></h6>
+            </center>
+        </div>
+    </div>
+</body>
+</html>

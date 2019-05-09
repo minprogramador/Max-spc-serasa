@@ -1,0 +1,200 @@
+<div class="main">
+    <div class="topmss">
+      <center>
+        <img id="logint" src="./img/max-spc-serasa.png"><br>
+      </center>
+    </div>
+    <div>
+
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="2">
+                  <div class="icontxt"></div>&nbsp;IDENTIFICAÇÃO
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td_dark_2colunas_menor">
+                  CPF: <span id="filtro_cpf_span">{{cpf}}</span>
+                </td>
+                <td class="td_dark_2colunas_menor">
+                  Situação do CPF: <span id="filtro_cpf_span">{{situacao_do_cpf}}</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="td_dark_2colunas_menor">Data da Inscrição do CPF:</td>
+                <td class="td_form"><span>{{data_da_inscricao_do_cpf}}</span></td>
+              </tr>
+              <tr>
+                <td class="td_dark_2colunas_menor">Nome:</td>
+                <td class="td_form"><span>{{nome}}</span></td>
+              </tr>
+              <tr>
+                <td class="td_dark_2colunas_menor">Data de Nascimento:</td>
+                <td class="td_form"><span>{{data_de_nascimento}}</span></td>
+              </tr>
+              <tr>
+                <td class="td_dark_2colunas_menor">Nome da mãe:</td>
+                <td class="td_form"><span>{{nome_da_mae}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="4">
+                  <div class="icontxt"></div>&nbsp;ENDEREÇO/LOCALIZAÇÃO
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td_dark">Endereço:&nbsp;</td>
+                <td class="td_form" colspan="3"><span>{{endereco}}</span> </tr>
+              <tr>
+                <td class="td_dark">Bairro:&nbsp;</td>
+                <td class="td_form"><span>{{bairro}}</span></td>
+                <td class="td_dark">Cidade:&nbsp;</td>
+                <td class="td_form"><span>{{cidade}}</span></td>
+              </tr>
+              <tr>
+                <td class="td_dark">UF:&nbsp;</td>
+                <td class="td_form"><span>{{uf}}</span></td>
+                <td class="td_dark">CEP:&nbsp;</td>
+                <td class="td_form"><span>{{cep}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="5">
+                  <div class="icontxt"></div>&nbsp;ENDEREÇOS INFORMADOS ANTERIORMENTE
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="panel6_result">Endereço</td>
+                <td class="panel6_result">Bairro</td>
+                <td class="panel6_result">Cidade</td>
+                <td class="panel6_result">CEP</td>
+                <td class="panel6_result">UF</td>
+              </tr>
+              {{endereco_anterior}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="5">
+                  <div class="icontxt"></div>RESUMO DAS OCORRÊNCIAS
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="panel_resumo_consulta">Ocorrência</td>
+                <td class="panel_resumo_consulta">Quantidade</td>
+                <td class="panel_resumo_consulta">Última Ocorrência</td>
+                <td class="panel_resumo_consulta">Valor</td>
+              </tr>
+              {{ocorrenc}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="1">
+                  <div class="icontxt"></div>&nbsp;SPC SCORE 12 MESES
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td_full_score">
+                  <table class="tdb_box_score_100" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="main-score">
+                            <div class="valor-score valor-score-verde-claro">
+                              <span>Score<br>{{score.pontuacao}}</span>
+                            </div>
+                            <div class="descricao-score">
+                              <span>{{score.descricao}}</span>
+                            </div>
+            <div class="score-imagem-valor-inicial">
+                              0
+                            </div>
+                            <div class="score-imagem-valor-final">
+                              1000
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td class="td_form_score"><span class="texto_5_score">ESSA INFORMAÇÃO É CONFIDENCIAL. É
+                    EXPRESSAMENTE PROIBIDA SUA REPRODUÇÃO, TOTAL OU PARCIAL, BEM COMO SUA DIVULGAÇÃO A
+                    TERCEIROS. A DECISÃO DE CONCEDER OU NÃO O CRÉDITO É EXCLUSIVA DA EMPRESA
+                    CONSULENTE</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="4">
+                  <div class="icontxt"></div>&nbsp;CONSULTAS REALIZADAS NO SPC E SERASA
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="panel6_result">Data da Consulta</td>
+                <td class="panel6_result">Associado/Ramo Atividade</td>
+                <td class="panel6_result">Cidade Origem</td>
+                <td class="panel6_result">Origem</td>
+              </tr>
+              {{consultaSpcSerasa}}
+            </tbody>
+          </table>
+        </div>
+
+
+    </div>
+
+
+  <br><br>
+  <center>
+      <button type="button" class=" btn btn-default" onclick="main();">
+      <span>Nova consulta</span>
+    </button>
+  </center>
+  <br><br>
+
+
+</div>
