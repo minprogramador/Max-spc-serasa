@@ -82,7 +82,15 @@ if(array_key_exists('data_da_inscricao_do_cpf', $identificacao)) {
 }
 
 $nome = $identificacao['nome'];
-$data_de_nascimento = $identificacao['data_de_nascimento']['date'];
+if(array_key_exists('data_de_nascimento', $identificacao)) {
+    $data_de_nascimento = $identificacao['data_de_nascimento']['date'];
+    if(stristr($data_de_nascimento, '-')){
+       $data_de_nascimento =  date('d/m/Y', strtotime($data_de_nascimento));
+    }
+}else{
+    $data_de_nascimento = '';
+}
+
 $nome_da_mae = $identificacao['nome_da_mae'];
 
 $endereco = $resultado['endereco']['endereco'];
