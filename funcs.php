@@ -1,6 +1,9 @@
 <?php
 
 function jsonToTd($enderecoanterior) {
+	if(count($enderecoanterior) == 0) {
+		return '<tr><td colspan="100%" align="center">NADA CONSTA</td></tr>';
+	}
     $endAnt = ''; 
     foreach ($enderecoanterior as $key => $value) {
         $endAnt .= '<tr>';
@@ -18,6 +21,10 @@ function jsonToTd($enderecoanterior) {
 }
 
 function jsonToTd2($enderecoanterior) {
+	if(count($enderecoanterior) == 0) {
+		return '<tr><td colspan="100%" align="center">NADA CONSTA</td></tr>';
+	}
+
     $endAnt = ''; 
     foreach ($enderecoanterior as $key => $value) {
 
@@ -27,7 +34,7 @@ function jsonToTd2($enderecoanterior) {
             $endAnt .= '<td class="td_dark_maior">' . $key . '</td>';
 
         foreach($value as $v) {
-            $endAnt .= '<td class="gridConsulta">' . $v . '</td>';
+            @$endAnt .= '<td class="gridConsulta">' . $v . '</td>';
         }
         $endAnt .= '</tr>';
     }

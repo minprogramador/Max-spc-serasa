@@ -8,8 +8,6 @@ $resultado = file_get_contents('debug/debug_upcredja2.json');
 
 $resultado = json_decode($resultado, true);
 
-print_r($resultado);
-die;
 
 $identificacao     = $resultado['identificacao'];
 $endereco          = $resultado['endereco'];
@@ -18,6 +16,33 @@ $ocorrencias       = $resultado['resumoOcorrencias'];
 $score             = $resultado['score'];
 $score['imagem'] = '';
 $consultaSpcSerasa = $resultado['consultaSpcSerasa'];
+
+
+if(array_key_exists('protestos', $resultado)) {
+    $protestos = $resultado['protestos'];
+}else{
+    $protestos = array();
+}
+
+
+if(array_key_exists('pendenciasSPC', $resultado)) {
+    $pendenciasSPC = $resultado['pendenciasSPC'];
+}else{
+    $pendenciasSPC = array();
+}
+
+
+if(array_key_exists('pendenciasFinanceiraSerasa', $resultado)) {
+    $pendenciasFinanceiraSerasa = $resultado['pendenciasFinanceiraSerasa'];
+}else{
+    $pendenciasFinanceiraSerasa = array();
+}
+
+if(array_key_exists('chequeSemFundo', $resultado)) {
+    $chequeSemFundo = $resultado['chequeSemFundo'];
+}else{
+    $chequeSemFundo = array();
+}
 
 
 $res = array(
@@ -74,6 +99,22 @@ $endAnt = jsonToTd($enderecoanterior);
 
 $consultaSpcSerasa = jsonToTd($consultaSpcSerasa);
 
+$pendenciasFinanceiraSerasa = jsonToTd($pendenciasFinanceiraSerasa);
+
+$protestos = jsonToTd($protestos);
+
+$pendenciasSPC = jsonToTd($pendenciasSPC);
+// echo $pendenciasFinanceiraSerasa;
+// die;
+
+
+$chequeSemFundo = jsonToTd($chequeSemFundo);
+
+
+// print_r($resultado);
+// die;
+
+
 
 $dados = file_get_contents('layout/resultadook.html');
 $dados = str_replace('{{cpf}}', $cpf, $dados);
@@ -96,6 +137,14 @@ $dados = str_replace('{{score.pontuacao}}', $score['pontuacao'], $dados);
 $dados = str_replace('{{score.descricao}}', $score['descricao'], $dados);
 
 $dados = str_replace('{{consultaSpcSerasa}}', $consultaSpcSerasa, $dados);
+
+$dados = str_replace('{{pendenciasFinanceiraSerasa}}', $pendenciasFinanceiraSerasa, $dados);
+
+$dados = str_replace('{{protestos}}', $protestos, $dados);
+
+$dados = str_replace('{{pendenciasSPC}}', $pendenciasSPC, $dados);
+
+$dados = str_replace('{{chequeSemFundo}}', $chequeSemFundo, $dados);
 
 echo json_encode(array('dados' => $dados));
 die;

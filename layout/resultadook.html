@@ -163,6 +163,125 @@
           </table>
         </div>
 
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="8">
+                  <div class="icontxt"></div>&nbsp;PENDÊNCIAS FINANCEIRAS SERASA
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Data de Ocorrência</b></td>
+                <td><b>Modalidade</b></td>
+                <td><b>Valor</b></td>
+                <td><b>Contrato</b></td>
+                <td><b>Avalista</b></td>
+                <td><b>&nbsp;&nbsp;Origem&nbsp;&nbsp;</b></td>
+                <td><b>&nbsp;&nbsp;Cidade&nbsp;&nbsp;</b></td>
+                <td><b>Infs. Adicionais</b></td>
+              </tr>
+              {{pendenciasFinanceiraSerasa}}
+            </tbody>
+          </table>
+        </div>
+
+
+
+
+        <div class="box table-responsive">
+
+          <table class="table table-border-outside">
+
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="8">
+                  <div class="icontxt"></div>&nbsp;REGISTROS DE INADIMPLÊNCIA - SPC
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Data Inclusão</b></td>
+                <td><b>Data Vencimento</b></td>
+                <td><b>Contrato/Fatura</b></td>
+                <td><b>Tipo</b></td>
+                <td><b>Valor</b></td>
+                <td><b>Associado/Credor</b></td>
+                <td><b>Cidade/UF</b></td>
+                <td><b>Origem</b></td>
+              </tr>
+              {{pendenciasSPC}}
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+
+        <div class="box table-responsive">
+
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="6">
+                  <div class="icontxt"></div>&nbsp;CHEQUES SEM FUNDO - CCF
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td><b>Último Cheque</b></td>
+                <td><b>Banco</b></td>
+                <td><b>Agência</b></td>
+                <td><b>Quantidade</b></td>
+                <td><b>Motivo</b></td>
+                <td><b>Origem</b></td>
+              </tr>
+              {{chequeSemFundo}}              
+              </tbody>
+          </table>
+
+        </div>
+
+
+
+
+
+        <div class="box table-responsive">
+          <table class="table table-border-outside">
+            <thead class="thead-dark">
+              <tr>
+                <th class="panel" colspan="7">
+                  <div class="icontxt"></div>&nbsp;PROTESTOS
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="panel6_result">Data Protesto</td>
+                <td class="panel6_result">Valor</td>
+                <td class="panel6_result">Cartório</td>
+                <td class="panel6_result">Cidade</td>
+                <td class="panel6_result">UF</td>
+                <td class="panel6_result">Natureza</td>
+                <td class="panel6_result">Infs. Adicionais</td>
+              </tr>
+              {{protestos}}
+            </tbody>
+          </table>
+        </div>
+
+
+
+
+
+
         <div class="box table-responsive">
           <table class="table table-border-outside">
             <thead class="thead-dark">
@@ -183,6 +302,7 @@
             </tbody>
           </table>
         </div>
+
 
 
     </div>
