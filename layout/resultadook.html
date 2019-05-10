@@ -1,323 +1,291 @@
 <div class="main">
-    <div class="topmss">
-      <center>
-        <img id="logint" src="./img/max-spc-serasa.png"><br>
-      </center>
+  <div class="topmss">
+    <center>
+      <img id="logint" src="./img/max-spc-serasa.png"><br>
+    </center>
+  </div>
+
+  <div>
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="2">
+              <div class="icontxt"></div>&nbsp;IDENTIFICAÇÃO
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td_dark_2colunas_menor">
+              CPF: <span id="filtro_cpf_span">{{cpf}}</span>
+             {{situacao_do_cpf}}
+             {{data_da_inscricao_do_cpf}}
+            </td>
+          </tr>
+          <tr>
+            <td class="td_dark_2colunas_menor">Nome:<span id="filtro_cpf_span">{{nome}}</span></td>
+          </tr>
+          <tr>
+            <td class="td_dark_2colunas_menor">
+              Data de Nascimento: <span id="filtro_cpf_span">{{data_de_nascimento}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="td_dark_2colunas_menor">
+              Nome da mãe: <span id="filtro_cpf_span">{{nome_da_mae}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div>
 
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="4">
+              <div class="icontxt"></div>&nbsp;ENDEREÇO/LOCALIZAÇÃO
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td_dark" colspan="3">
+              Endereço:&nbsp;<span id="filtro_cpf_span">{{endereco}}</span>
+            </td>
+            <td class="td_dark">
+              Bairro:&nbsp;<span id="filtro_cpf_span">{{bairro}}</span>
+            </td>
+            </tr>
+          <tr>
+            <td class="td_dark" colspan="2">
+              Cidade:&nbsp;<span id="filtro_cpf_span">{{cidade}}</span>
+            </td>
+            <td class="td_dark">
+              UF:&nbsp;<span id="filtro_cpf_span">{{uf}}</span>
+            </td>
+            <td class="td_dark">
+              CEP:&nbsp;<span id="filtro_cpf_span">{{cep}}</span>
+            </td>
 
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="2">
-                  <div class="icontxt"></div>&nbsp;IDENTIFICAÇÃO
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="td_dark_2colunas_menor">
-                  CPF: <span id="filtro_cpf_span">{{cpf}}</span>
-                 &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
-                 Situação do CPF: <span id="filtro_cpf_span">{{situacao_do_cpf}}</span>
-                 &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
-                 Data da Inscrição do CPF: <span id="filtro_cpf_span">{{data_da_inscricao_do_cpf}}</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="td_dark_2colunas_menor">Nome:<span id="filtro_cpf_span">{{nome}}</span></td>
-              </tr>
-              <tr>
-                <td class="td_dark_2colunas_menor">
-                  Data de Nascimento: <span id="filtro_cpf_span">{{data_de_nascimento}}</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="td_dark_2colunas_menor">
-                  Nome da mãe: <span id="filtro_cpf_span">{{nome_da_mae}}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="4">
-                  <div class="icontxt"></div>&nbsp;ENDEREÇO/LOCALIZAÇÃO
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="td_dark" colspan="3">
-                  Endereço:&nbsp;<span id="filtro_cpf_span">{{endereco}}</span>
-                </td>
-                <td class="td_dark">
-                  Bairro:&nbsp;<span id="filtro_cpf_span">{{bairro}}</span>
-                </td>
-                </tr>
-              <tr>
-                <td class="td_dark" colspan="2">
-                  Cidade:&nbsp;<span id="filtro_cpf_span">{{cidade}}</span>
-                </td>
-                <td class="td_dark">
-                  UF:&nbsp;<span id="filtro_cpf_span">{{uf}}</span>
-                </td>
-                <td class="td_dark">
-                  CEP:&nbsp;<span id="filtro_cpf_span">{{cep}}</span>
-                </td>
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="5">
+              <div class="icontxt"></div>&nbsp;ENDEREÇOS INFORMADOS ANTERIORMENTE
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="panel6_result">Endereço</td>
+            <td class="panel6_result">Bairro</td>
+            <td class="panel6_result">Cidade</td>
+            <td class="panel6_result">CEP</td>
+            <td class="panel6_result">UF</td>
+          </tr>
+          {{endereco_anterior}}
+        </tbody>
+      </table>
+    </div>
 
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="5">
+              <div class="icontxt"></div>RESUMO DAS OCORRÊNCIAS
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="panel_resumo_consulta">Ocorrência</td>
+            <td class="panel_resumo_consulta">Quantidade</td>
+            <td class="panel_resumo_consulta">Última Ocorrência</td>
+            <td class="panel_resumo_consulta">Valor</td>
+          </tr>
+          {{ocorrenc}}
+        </tbody>
+      </table>
+    </div>
 
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="5">
-                  <div class="icontxt"></div>&nbsp;ENDEREÇOS INFORMADOS ANTERIORMENTE
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="panel6_result">Endereço</td>
-                <td class="panel6_result">Bairro</td>
-                <td class="panel6_result">Cidade</td>
-                <td class="panel6_result">CEP</td>
-                <td class="panel6_result">UF</td>
-              </tr>
-              {{endereco_anterior}}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="5">
-                  <div class="icontxt"></div>RESUMO DAS OCORRÊNCIAS
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="panel_resumo_consulta">Ocorrência</td>
-                <td class="panel_resumo_consulta">Quantidade</td>
-                <td class="panel_resumo_consulta">Última Ocorrência</td>
-                <td class="panel_resumo_consulta">Valor</td>
-              </tr>
-              {{ocorrenc}}
-            </tbody>
-          </table>
-        </div>
-
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="1">
-                  <div class="icontxt"></div>&nbsp;SPC SCORE 12 MESES
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="td_full_score">
-                  <table class="tdb_box_score_100" width="100%" cellspacing="0" cellpadding="0">
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="main-score">
-                            <div class="valor-score valor-score-verde-claro">
-                              <span>Score<br>{{score.pontuacao}}</span>
-                            </div>
-                            <div class="descricao-score">
-                              <span>{{score.descricao}}</span>
-                            </div>
-            <div class="score-imagem-valor-inicial">
-                              0
-                            </div>
-                            <div class="score-imagem-valor-final">
-                              1000
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <td class="td_form_score"><span class="texto_5_score">ESSA INFORMAÇÃO É CONFIDENCIAL. É
-                    EXPRESSAMENTE PROIBIDA SUA REPRODUÇÃO, TOTAL OU PARCIAL, BEM COMO SUA DIVULGAÇÃO A
-                    TERCEIROS. A DECISÃO DE CONCEDER OU NÃO O CRÉDITO É EXCLUSIVA DA EMPRESA
-                    CONSULENTE</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="8">
-                  <div class="icontxt"></div>&nbsp;PENDÊNCIAS FINANCEIRAS SERASA
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Data de Ocorrência</b></td>
-                <td><b>Modalidade</b></td>
-                <td><b>Valor</b></td>
-                <td><b>Contrato</b></td>
-                <td><b>Avalista</b></td>
-                <td><b>&nbsp;&nbsp;Origem&nbsp;&nbsp;</b></td>
-                <td><b>&nbsp;&nbsp;Cidade&nbsp;&nbsp;</b></td>
-                <td><b>Infs. Adicionais</b></td>
-              </tr>
-              {{pendenciasFinanceiraSerasa}}
-            </tbody>
-          </table>
-        </div>
-
-
-
-
-        <div class="box table-responsive">
-
-          <table class="table table-border-outside">
-
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="8">
-                  <div class="icontxt"></div>&nbsp;REGISTROS DE INADIMPLÊNCIA - SPC
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Data Inclusão</b></td>
-                <td><b>Data Vencimento</b></td>
-                <td><b>Contrato/Fatura</b></td>
-                <td><b>Tipo</b></td>
-                <td><b>Valor</b></td>
-                <td><b>Associado/Credor</b></td>
-                <td><b>Cidade/UF</b></td>
-                <td><b>Origem</b></td>
-              </tr>
-              {{pendenciasSPC}}
-            </tbody>
-
-          </table>
-
-        </div>
-
-
-
-        <div class="box table-responsive">
-
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="6">
-                  <div class="icontxt"></div>&nbsp;CHEQUES SEM FUNDO - CCF
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-
-              <tr>
-                <td><b>Último Cheque</b></td>
-                <td><b>Banco</b></td>
-                <td><b>Agência</b></td>
-                <td><b>Quantidade</b></td>
-                <td><b>Motivo</b></td>
-                <td><b>Origem</b></td>
-              </tr>
-              {{chequeSemFundo}}              
-              </tbody>
-          </table>
-
-        </div>
-
-
-
-
-
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="7">
-                  <div class="icontxt"></div>&nbsp;PROTESTOS
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="panel6_result">Data Protesto</td>
-                <td class="panel6_result">Valor</td>
-                <td class="panel6_result">Cartório</td>
-                <td class="panel6_result">Cidade</td>
-                <td class="panel6_result">UF</td>
-                <td class="panel6_result">Natureza</td>
-                <td class="panel6_result">Infs. Adicionais</td>
-              </tr>
-              {{protestos}}
-            </tbody>
-          </table>
-        </div>
-
-
-
-
-
-
-        <div class="box table-responsive">
-          <table class="table table-border-outside">
-            <thead class="thead-dark">
-              <tr>
-                <th class="panel" colspan="4">
-                  <div class="icontxt"></div>&nbsp;CONSULTAS REALIZADAS NO SPC E SERASA
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="panel6_result">Data da Consulta</td>
-                <td class="panel6_result">Associado/Ramo Atividade</td>
-                <td class="panel6_result">Cidade Origem</td>
-                <td class="panel6_result">Origem</td>
-              </tr>
-              {{consultaSpcSerasa}}
-            </tbody>
-          </table>
-        </div>
-
-
-
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="1">
+              <div class="icontxt"></div>&nbsp;SPC SCORE 12 MESES
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td_full_score">
+              <table class="tdb_box_score_100" width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="main-score">
+                        <div class="valor-score">
+                          <span>Score<br><span id="scoreok">{{score.pontuacao}}</span></span>
+                        </div>
+                        <div class="descricao-score">
+                          <span>{{score.descricao}}</span>
+                        </div>
+                        <img src="img/score-seta-cinza.png" class="imagem-score">
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="td_form_score"><span class="texto_5_score">ESSA INFORMAÇÃO É CONFIDENCIAL. É
+                EXPRESSAMENTE PROIBIDA SUA REPRODUÇÃO, TOTAL OU PARCIAL, BEM COMO SUA DIVULGAÇÃO A
+                TERCEIROS. A DECISÃO DE CONCEDER OU NÃO O CRÉDITO É EXCLUSIVA DA EMPRESA
+                CONSULENTE</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
 
-  <br><br>
-  <center>
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="8">
+              <div class="icontxt"></div>&nbsp;PENDÊNCIAS FINANCEIRAS SERASA
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Data de Ocorrência</b></td>
+            <td><b>Modalidade</b></td>
+            <td><b>Valor</b></td>
+            <td><b>Contrato</b></td>
+            <td><b>Avalista</b></td>
+            <td><b>Origem</b></td>
+            <td><b>Cidade</b></td>
+            <td><b>Infs. Adicionais</b></td>
+          </tr>
+          {{pendenciasFinanceiraSerasa}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="8">
+              <div class="icontxt"></div>&nbsp;REGISTROS DE INADIMPLÊNCIA - SPC
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Data Inclusão</b></td>
+            <td><b>Data Vencimento</b></td>
+            <td><b>Contrato/Fatura</b></td>
+            <td><b>Tipo</b></td>
+            <td><b>Valor</b></td>
+            <td><b>Associado/Credor</b></td>
+            <td><b>Cidade/UF</b></td>
+            <td><b>Origem</b></td>
+          </tr>
+          {{pendenciasSPC}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="6">
+              <div class="icontxt"></div>&nbsp;CHEQUES SEM FUNDO - CCF
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Último Cheque</b></td>
+            <td><b>Banco</b></td>
+            <td><b>Agência</b></td>
+            <td><b>Quantidade</b></td>
+            <td><b>Motivo</b></td>
+            <td><b>Origem</b></td>
+          </tr>
+          {{chequeSemFundo}}              
+          </tbody>
+      </table>
+    </div>
+
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="7">
+              <div class="icontxt"></div>&nbsp;PROTESTOS
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="panel6_result">Data Protesto</td>
+            <td class="panel6_result">Valor</td>
+            <td class="panel6_result">Cartório</td>
+            <td class="panel6_result">Cidade</td>
+            <td class="panel6_result">UF</td>
+            <td class="panel6_result">Natureza</td>
+            <td class="panel6_result">Infs. Adicionais</td>
+          </tr>
+          {{protestos}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box table-responsive">
+      <table class="table table-border-outside">
+        <thead class="thead-dark">
+          <tr>
+            <th class="panel" colspan="4">
+              <div class="icontxt"></div>&nbsp;CONSULTAS REALIZADAS NO SPC E SERASA
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="panel6_result">Data da Consulta</td>
+            <td class="panel6_result">Associado/Ramo Atividade</td>
+            <td class="panel6_result">Cidade Origem</td>
+            <td class="panel6_result">Origem</td>
+          </tr>
+          {{consultaSpcSerasa}}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div>
+    <center>
+      <br><br>
       <button type="button" class=" btn btn-default" onclick="main();">
-      <span>Nova consulta</span>
-    </button>
-  </center>
-  <br><br>
-
+        <span>Nova consulta</span>
+      </button>
+      <br><br>
+    </center>
+  </div>
 
 </div>

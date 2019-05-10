@@ -3,158 +3,247 @@
 require('funcs.php');
 include('config.php');
 
-
-$resultado = file_get_contents('debug/debug_upcredja2.json');
-
-$resultado = json_decode($resultado, true);
-
-
-$identificacao     = $resultado['identificacao'];
-$endereco          = $resultado['endereco'];
-$enderecoanterior  = $resultado['enderecosInformadosAnteriormente'];
-$ocorrencias       = $resultado['resumoOcorrencias'];
-$score             = $resultado['score'];
-$score['imagem'] = '';
-$consultaSpcSerasa = $resultado['consultaSpcSerasa'];
-
-
-if(array_key_exists('protestos', $resultado)) {
-    $protestos = $resultado['protestos'];
-}else{
-    $protestos = array();
-}
-
-
-if(array_key_exists('pendenciasSPC', $resultado)) {
-    $pendenciasSPC = $resultado['pendenciasSPC'];
-}else{
-    $pendenciasSPC = array();
-}
-
-
-if(array_key_exists('pendenciasFinanceiraSerasa', $resultado)) {
-    $pendenciasFinanceiraSerasa = $resultado['pendenciasFinanceiraSerasa'];
-}else{
-    $pendenciasFinanceiraSerasa = array();
-}
-
-if(array_key_exists('chequeSemFundo', $resultado)) {
-    $chequeSemFundo = $resultado['chequeSemFundo'];
-}else{
-    $chequeSemFundo = array();
-}
-
-
-$res = array(
-    'identificacao' => $identificacao,
-    'endereco'      => $endereco,
-    'endereco_anterior' => $enderecoanterior,
-    'ocorrencias' => $ocorrencias,
-    'score'       => $score,
-    'spc_serasa'  => $consultaSpcSerasa
-);
-
-
-/*
-
-
-pendenciasFinanceiraSerasa
-pendenciasSPC
-chequeSemFundo
-protestos
-consultaSpcSerasa
-
-
-*/
-
-
-$cpf = $identificacao['cpf'];
-if(array_key_exists('situacao_do_cpf', $identificacao)) {
-    $situacao_do_cpf = $identificacao['situacao_do_cpf'];
-}else{
-    $situacao_do_cpf = '';
-}
-
-if(array_key_exists('data_da_inscricao_do_cpf', $identificacao)) {
-    $data_da_inscricao_do_cpf = $identificacao['data_da_inscricao_do_cpf'];
-}else{
-    $data_da_inscricao_do_cpf = '';
-}
-
-$nome = $identificacao['nome'];
-if(array_key_exists('data_de_nascimento', $identificacao)) {
-    $data_de_nascimento = $identificacao['data_de_nascimento']['date'];
-    if(stristr($data_de_nascimento, '-')){
-       $data_de_nascimento =  date('d/m/Y', strtotime($data_de_nascimento));
+function saveLog($doc, $res) {
+    if(file_put_contents('./debug/'.$doc.'.log', $res)) {
+        return true;
     }
-}else{
-    $data_de_nascimento = '';
+    return false;
 }
 
-$nome_da_mae = $identificacao['nome_da_mae'];
+function consultar($doc, $urltoken, $token) {
 
-$endereco = $resultado['endereco']['endereco'];
-$bairro   = $resultado['endereco']['bairro'];
-$cidade   = $resultado['endereco']['cidade'];
-$uf       = $resultado['endereco']['uf'];
-$cep      = $resultado['endereco']['cep'];
+    @$resultado = file_get_contents('debug/32900637805.log');
 
-$ocorrenc = jsonToTd2($ocorrencias);
+    if(stristr($resultado, '{')) {
+        $resultado = json_decode($resultado, true);
+        $resultado = $resultado['data']['consultas'][10]['data'];
+        return $resultado;
+    }
+    return $resultado;
 
-$endAnt = jsonToTd($enderecoanterior);
+    /*========================================*/
 
-//resumoOcorrencias
+    if(!preg_match("#^([0-9]){3}([0-9]){3}([0-9]){3}([0-9]){2}$#i", $doc)){
+        return 'doc_invalido';
+    }
+    $tipo = "cpf";
 
-$consultaSpcSerasa = jsonToTd($consultaSpcSerasa);
+    $post = json_encode([
+        "aba" => $tipo,
+        "filtros" => [
+            "campos" => [
+                $tipo => [
+                    "documento" => $doc
+                ]
+            ],
+            "empresas" => [
+                10 => true
+            ],
+            "opcionais" => []
+        ],
+        "sistema" => 2
+    ]);
 
-$pendenciasFinanceiraSerasa = jsonToTd($pendenciasFinanceiraSerasa);
+    $header = [
+        'Content-Type: application/json; charset=utf-8',
+        'Content-Length: ' . strlen($post),
+        'Authorization: Bearer '.$token,
+        'fingerprint: API'
+    ];
 
-$protestos = jsonToTd($protestos);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $urltoken); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
-$pendenciasSPC = jsonToTd($pendenciasSPC);
-// echo $pendenciasFinanceiraSerasa;
-// die;
+    $output = curl_exec($ch);
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
 
+    saveLog($doc, $output);
 
-$chequeSemFundo = jsonToTd($chequeSemFundo);
+    if(!stristr($output, 'identificacao')) {
+        return 'indisponivel';
+    }
 
+    $json = json_decode($output, TRUE);
+    $erro = NULL;
+    $resultado = NULL;
 
-// print_r($resultado);
-// die;
+    if($httpcode == 200){
+        $sistema = 10;
+        if(isset($json['data'])) {
+            if(isset($json['data']['erros'][$sistema])) {
+                $erro = $json['data']['erros'][$sistema];
+            }else if(isset($json['data']['consultas'][$sistema])){
+                $resultado = $json['data']['consultas'][$sistema]['data'];
+            }else{
+                $erro = "Erro desconhecido [1]";
+            }
+        }else{
+            $erro = "Erro desconhecido [2]";
+        }
+    }else{
+        $erro = (isset($json['msg'])) ? $json['msg'] : "Erro desconhecido [3]";
+    }
 
+    if($erro) {
+        return 'erro_desconhecido';
+    }
 
+    return $resultado;
+}
 
-$dados = file_get_contents('layout/resultadook.html');
-$dados = str_replace('{{cpf}}', $cpf, $dados);
-$dados = str_replace('{{situacao_do_cpf}}', $situacao_do_cpf, $dados);
-$dados = str_replace('{{data_da_inscricao_do_cpf}}', $data_da_inscricao_do_cpf, $dados);
-$dados = str_replace('{{nome}}', $nome, $dados);
-$dados = str_replace('{{data_de_nascimento}}', $data_de_nascimento, $dados);
-$dados = str_replace('{{nome_da_mae}}', $nome_da_mae, $dados);
+function filtrar($resultado) {
+    if(!is_array($resultado)) {
+        return false;
+    }
 
-$dados = str_replace('{{endereco}}', $endereco, $dados);
-$dados = str_replace('{{bairro}}', $bairro, $dados);
-$dados = str_replace('{{cidade}}', $cidade, $dados);
-$dados = str_replace('{{uf}}', $uf, $dados);
-$dados = str_replace('{{cep}}', $cep, $dados);
+    if(array_key_exists('identificacao', $resultado)) {
+        $identificacao     = $resultado['identificacao'];
+        $endereco          = $resultado['endereco'];
+        $enderecoanterior  = $resultado['enderecosInformadosAnteriormente'];
+    }else{
+        $identificacao = false;
+    }
 
-$dados = str_replace('{{endereco_anterior}}', $endAnt, $dados);
-$dados = str_replace('{{ocorrenc}}', $ocorrenc, $dados);
+    if(array_key_exists('resumoOcorrencias', $resultado)) {
+        $ocorrencias = $resultado['resumoOcorrencias'];
+    }else{
+        $ocorrencias = false;
+    }
 
-$dados = str_replace('{{score.pontuacao}}', $score['pontuacao'], $dados);
-$dados = str_replace('{{score.descricao}}', $score['descricao'], $dados);
+    if(array_key_exists('score', $resultado)) {
+        $score = $resultado['score'];
+    }else{
+        $score = false;
+    }
 
-$dados = str_replace('{{consultaSpcSerasa}}', $consultaSpcSerasa, $dados);
+    if(array_key_exists('consultaSpcSerasa', $resultado)) {
+        $consultaSpcSerasa = $resultado['consultaSpcSerasa'];
+    }else{
+        $consultaSpcSerasa = false;
+    }
 
-$dados = str_replace('{{pendenciasFinanceiraSerasa}}', $pendenciasFinanceiraSerasa, $dados);
+    if(array_key_exists('protestos', $resultado)) {
+        $protestos = $resultado['protestos'];
+    }else{
+        $protestos = array();
+    }
 
-$dados = str_replace('{{protestos}}', $protestos, $dados);
+    if(array_key_exists('pendenciasSPC', $resultado)) {
+        $pendenciasSPC = $resultado['pendenciasSPC'];
+    }else{
+        $pendenciasSPC = array();
+    }
 
-$dados = str_replace('{{pendenciasSPC}}', $pendenciasSPC, $dados);
+    if(array_key_exists('pendenciasFinanceiraSerasa', $resultado)) {
+        $pendenciasFinanceiraSerasa = $resultado['pendenciasFinanceiraSerasa'];
+    }else{
+        $pendenciasFinanceiraSerasa = array();
+    }
 
-$dados = str_replace('{{chequeSemFundo}}', $chequeSemFundo, $dados);
+    if(array_key_exists('chequeSemFundo', $resultado)) {
+        $chequeSemFundo = $resultado['chequeSemFundo'];
+    }else{
+        $chequeSemFundo = array();
+    }
 
-echo json_encode(array('dados' => $dados));
+    $cpf = $identificacao['cpf'];
+    if(array_key_exists('situacao_do_cpf', $identificacao)) {
+        $situacao_do_cpf = $identificacao['situacao_do_cpf'];
+    }else{
+        $situacao_do_cpf = '';
+    }
+
+    if(array_key_exists('data_da_inscricao_do_cpf', $identificacao)) {
+        $data_da_inscricao_do_cpf = $identificacao['data_da_inscricao_do_cpf'];
+    }else{
+        $data_da_inscricao_do_cpf = '';
+    }
+
+    $nome = $identificacao['nome'];
+    if(array_key_exists('data_de_nascimento', $identificacao)) {
+        $data_de_nascimento = $identificacao['data_de_nascimento']['date'];
+        if(stristr($data_de_nascimento, '-')){
+           $data_de_nascimento =  date('d/m/Y', strtotime($data_de_nascimento));
+        }
+    }else{
+        $data_de_nascimento = '';
+    }
+
+    $nome_da_mae = $identificacao['nome_da_mae'];
+
+    $endereco = $resultado['endereco']['endereco'];
+    $bairro   = $resultado['endereco']['bairro'];
+    $cidade   = $resultado['endereco']['cidade'];
+    $uf       = $resultado['endereco']['uf'];
+    $cep      = $resultado['endereco']['cep'];
+    if(is_array($score) && array_key_exists('pontuacao', $score)) {
+        $scorepontos = $score['pontuacao'];
+    }else{
+        $scorepontos = '-';
+    }
+
+    $ocorrenc       = jsonToTd2($ocorrencias);
+    $endAnt         = jsonToTd($enderecoanterior);
+    $protestos      = jsonToTd($protestos);
+    $pendenciasSPC  = jsonToTd($pendenciasSPC);
+    $chequeSemFundo = jsonToTd($chequeSemFundo);
+    $consultaSpcSerasa = jsonToTd($consultaSpcSerasa);
+    $pendenciasFinanceiraSerasa = jsonToTd($pendenciasFinanceiraSerasa);
+
+    if($data_da_inscricao_do_cpf != '') {
+        $data_da_inscricao_do_cpf = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;Data da Inscrição do CPF:&nbsp;<span id="filtro_cpf_span">'.$data_da_inscricao_do_cpf.'</span>';
+    }
+    if($situacao_do_cpf != '') {
+        $situacao_do_cpf = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;Situação do CPF: <span id="filtro_cpf_span">'.$situacao_do_cpf.'</span>';
+    }
+
+    $dados = file_get_contents('layout/resultadook.html');
+
+    $dados = str_replace('{{cpf}}', $cpf, $dados);
+    $dados = str_replace('{{situacao_do_cpf}}', $situacao_do_cpf, $dados);
+    $dados = str_replace('{{data_da_inscricao_do_cpf}}', $data_da_inscricao_do_cpf, $dados);
+    $dados = str_replace('{{nome}}', $nome, $dados);
+    $dados = str_replace('{{data_de_nascimento}}', $data_de_nascimento, $dados);
+    $dados = str_replace('{{nome_da_mae}}', $nome_da_mae, $dados);
+
+    $dados = str_replace('{{endereco}}', $endereco, $dados);
+    $dados = str_replace('{{bairro}}', $bairro, $dados);
+    $dados = str_replace('{{cidade}}', $cidade, $dados);
+    $dados = str_replace('{{uf}}', $uf, $dados);
+    $dados = str_replace('{{cep}}', $cep, $dados);
+
+    $dados = str_replace('{{endereco_anterior}}', $endAnt, $dados);
+
+    $dados = str_replace('{{score.pontuacao}}', $scorepontos, $dados);
+    $dados = str_replace('{{score.descricao}}', $score['descricao'], $dados);
+
+    $dados = str_replace('{{ocorrenc}}', $ocorrenc, $dados);
+    $dados = str_replace('{{consultaSpcSerasa}}', $consultaSpcSerasa, $dados);
+    $dados = str_replace('{{pendenciasFinanceiraSerasa}}', $pendenciasFinanceiraSerasa, $dados);
+    $dados = str_replace('{{protestos}}', $protestos, $dados);
+    $dados = str_replace('{{pendenciasSPC}}', $pendenciasSPC, $dados);
+    $dados = str_replace('{{chequeSemFundo}}', $chequeSemFundo, $dados);
+
+    return json_encode(array('dados' => $dados));
+}
+
+$documento = '32900637805';
+
+$resultado = consultar($documento, $urltoken, $token);
+$dados = filtrar($resultado);
+if($dados !== false) {
+    echo $dados;
+
+}else{
+    print_r($resultado);
+    echo 'invalido';
+}
+
 die;
 print_r($res);
 
@@ -170,87 +259,3 @@ $documento = '32900637805';
 // para CNPJ
 /*$tipo = "cnpj";
 $documento = "33.000.167/0001-01";*/
-
-// corpo do envio, manter intacto so alterar os valores acima
-$post = json_encode([
-    "aba" => $tipo,
-    "filtros" => [
-        "campos" => [
-            $tipo => [
-                "documento" => $documento
-            ]
-        ],
-        "empresas" => [
-            10 => true
-        ],
-        "opcionais" => []
-    ],
-    "sistema" => 2
-]);
-
-$header = [
-    'Content-Type: application/json; charset=utf-8',
-    'Content-Length: ' . strlen($post),
-    'Authorization: Bearer '.$token,
-    'fingerprint: API'
-];
-
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $urltoken); 
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-
-$output = curl_exec($ch);
-$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
-
-$json = json_decode($output, TRUE);
-
-$erro = NULL;
-$resultado = NULL;
-
-// Tratando o retorno
-if($httpcode == 200){
-    
-    // indentificando o codigo do sistema pelo tipo
-    $sistema = 10;
-
-    // Verificando se existe o atributo data
-    if(isset($json['data'])){
-
-        // verificando se existe alguma mensagem de erro
-        if(isset($json['data']['erros'][$sistema])){
-            $erro = $json['data']['erros'][$sistema];
-        }
-        
-        // Se não existir mensagem de erro, verifico se existe o retorno
-        else if(isset($json['data']['consultas'][$sistema])){
-            $resultado = $json['data']['consultas'][$sistema]['data'];
-        }
-        
-        // Se não existir mensagem de erro e nem de retorno é um erro desconhecido
-        else{
-            $erro = "Erro desconhecido [1]";
-        }
-
-    }
-    
-    // Se não tiver o atributo "data" deu alguma falha no retorno
-    else{
-        $erro = "Erro desconhecido [2]";
-    }
-
-}
-// Código != de 200 é erro
-else{
-    $erro = (isset($json['msg'])) ? $json['msg'] : "Erro desconhecido [3]";
-}
-
-if($erro){
-    throw new Exception($erro);
-}
-
-echo json_encode($resultado);
-?>

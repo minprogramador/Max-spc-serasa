@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css.css">
     <script type="text/javascript">
     var error = 0;
+    var scor = 0;
     function main() {
         $("#alertIndisponivel").hide();
         $("#alertDocInvalido").hide();
@@ -33,9 +34,8 @@
             dataType: "json"
         })
         .done(function(res) {
-
             if(res.length < 50) {
-                    callback({msg:'nadaencontrado'});
+            	callback({msg:'nadaencontrado'});
             }
             if(res.msg) {
                 if(res.msg === 'reload') {
@@ -76,7 +76,6 @@
         } else {
             go(doc, function(res) {
 
-                console.log(res);
 
                 if(error > 2) {
                     error=0;
@@ -105,7 +104,26 @@
                     $("#lay").hide();
                     $("#result").html(res.dados);
                     $('#result').show();
-                
+	
+	                scor    = $('#scoreok').text();
+	                var corScore = '';
+
+	                if(scor >= 0 && scor < 199) {
+	                	corScore = 'valor-score-vermelho';
+	                }else if(scor >= 199 && scor < 399) {
+	                	corScore = 'valor-score-laranja';
+	                }else if(scor >= 399 && scor < 599) {
+	                	corScore = 'valor-score-amarelo';
+	                }else if(scor >= 599 && scor < 799) {
+	                	corScore = 'valor-score-verde-claro';
+	                }else if(scor >= 799 && scor < 1000) {
+	                	corScore = 'valor-score-verde-escuro';
+	                }else{
+	                	corScore = 'valor-score-cinza';
+	                }
+					$('.valor-score').addClass(corScore);
+
+					$('.imagem-score').attr('src','img/'+corScore.replace('valor-', '')+'.png');
                 } else {
                     $("#alertDocInvalido").hide();
                     $("#alertNadaEncontrado").hide();
@@ -119,11 +137,14 @@
     }
 
     $(document).ready(function() {
+		
         setTimeout(function explode(){ $("#dados").focus(); }, 100);
+
         $('#frmPes').submit( function(e) {
             Pesquisar();
             e.preventDefault();
-                });
+		});
+
     });
 
     </script>
