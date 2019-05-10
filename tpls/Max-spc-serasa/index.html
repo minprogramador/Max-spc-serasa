@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Language" content="pt-br">
     <title>Max SPC/SERASA</title>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="css.css">
+    <script src="tpls/Max-spc-serasa/js/jquery.min.js"></script>
+    <script src="tpls/Max-spc-serasa/js/bootstrap.min.js"></script>
+    <link href="tpls/Max-spc-serasa/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="tpls/Max-spc-serasa/css.css">
     <script type="text/javascript">
     var error = 0;
     var scor = 0;
@@ -28,9 +28,9 @@
 
         $.ajax({
             method : "POST",
-            url : '../Max-spc-serasa.php',
+            url : './',
             data: { dados: doc },
-            timeout: 10000,
+            timeout: 40000,
             dataType: "json"
         })
         .done(function(res) {
@@ -75,8 +75,6 @@
             $("#alertDocInvalido").show();
         } else {
             go(doc, function(res) {
-
-
                 if(error > 2) {
                     error=0;
                     $("#loading").hide();
@@ -161,7 +159,7 @@
                 <div>
                     <div>
                         <center>
-                            <img id="log" src="./img/max-spc-serasa.png"><br>
+                            <img id="log" src="tpls/Max-spc-serasa/img/max-spc-serasa.png"><br>
                         </center>
                     </div>
                     <form action="" method="post" name="frmPes" id="frmPes">
@@ -190,9 +188,7 @@
         </div>
         <div class="row" id="loading">
             <center>
-                <span><img src=
-                "data:image/gif;base64,R0lGODlhKwALAPEAAP///wAAAIKCggAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAKwALAAACMoSOCMuW2diD88UKG95W88uF4DaGWFmhZid93pq+pwxnLUnXh8ou+sSz+T64oCAyTBUAACH5BAkKAAAALAAAAAArAAsAAAI9xI4IyyAPYWOxmoTHrHzzmGHe94xkmJifyqFKQ0pwLLgHa82xrekkDrIBZRQab1jyfY7KTtPimixiUsevAAAh+QQJCgAAACwAAAAAKwALAAACPYSOCMswD2FjqZpqW9xv4g8KE7d54XmMpNSgqLoOpgvC60xjNonnyc7p+VKamKw1zDCMR8rp8pksYlKorgAAIfkECQoAAAAsAAAAACsACwAAAkCEjgjLltnYmJS6Bxt+sfq5ZUyoNJ9HHlEqdCfFrqn7DrE2m7Wdj/2y45FkQ13t5itKdshFExC8YCLOEBX6AhQAADsAAAAAAAAAAAA="
-                title="Aguarde.." alt="Aguarde..."></span>
+                <span><img src="data:image/gif;base64,R0lGODlhKwALAPEAAP///wAAAIKCggAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAKwALAAACMoSOCMuW2diD88UKG95W88uF4DaGWFmhZid93pq+pwxnLUnXh8ou+sSz+T64oCAyTBUAACH5BAkKAAAALAAAAAArAAsAAAI9xI4IyyAPYWOxmoTHrHzzmGHe94xkmJifyqFKQ0pwLLgHa82xrekkDrIBZRQab1jyfY7KTtPimixiUsevAAAh+QQJCgAAACwAAAAAKwALAAACPYSOCMswD2FjqZpqW9xv4g8KE7d54XmMpNSgqLoOpgvC60xjNonnyc7p+VKamKw1zDCMR8rp8pksYlKorgAAIfkECQoAAAAsAAAAACsACwAAAkCEjgjLltnYmJS6Bxt+sfq5ZUyoNJ9HHlEqdCfFrqn7DrE2m7Wdj/2y45FkQ13t5itKdshFExC8YCLOEBX6AhQAADsAAAAAAAAAAAA=" title="Aguarde.." alt="Aguarde..."></span>
             </center>
         </div>
         <div class="row" id="limits">

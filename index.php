@@ -211,18 +211,14 @@ function filtrar($resultado) {
     $dados = str_replace('{{nome}}', $nome, $dados);
     $dados = str_replace('{{data_de_nascimento}}', $data_de_nascimento, $dados);
     $dados = str_replace('{{nome_da_mae}}', $nome_da_mae, $dados);
-
     $dados = str_replace('{{endereco}}', $endereco, $dados);
     $dados = str_replace('{{bairro}}', $bairro, $dados);
     $dados = str_replace('{{cidade}}', $cidade, $dados);
     $dados = str_replace('{{uf}}', $uf, $dados);
     $dados = str_replace('{{cep}}', $cep, $dados);
-
     $dados = str_replace('{{endereco_anterior}}', $endAnt, $dados);
-
     $dados = str_replace('{{score.pontuacao}}', $scorepontos, $dados);
     $dados = str_replace('{{score.descricao}}', $score['descricao'], $dados);
-
     $dados = str_replace('{{ocorrenc}}', $ocorrenc, $dados);
     $dados = str_replace('{{consultaSpcSerasa}}', $consultaSpcSerasa, $dados);
     $dados = str_replace('{{pendenciasFinanceiraSerasa}}', $pendenciasFinanceiraSerasa, $dados);
@@ -234,33 +230,34 @@ function filtrar($resultado) {
 }
 
 if(isset($_POST['dados'])) {
-    $documento = '32900637805';
+
+    // $dados = array('msg' => 'nadaencontrado');
+    // $dados = array('msg' => 'reload');
+    // $dados = array('msg' => 'fail');
+    // $dados = array('msg' => 'invalido');
+
+    $documento = $_POST['dados'];
+    $documento = str_replace(array('.', ',', '-', '/', ' ', '_', "\t", "\n", "\r"), '', $documento);
     $resultado = consultar($documento, $urltoken, $token);
-    $dados     = filtrar($resultado);
-    
+    if($resultado == 'erro_desconhecido') {
+        $dados = array('msg' => 'fail');
+        echo json_encode($dados);
+        die;
+    }
+
+    $dados = filtrar($resultado);
+
     if($dados !== false) {
         echo $dados;
     }else{
-        //print_r($resultado);
-        echo 'invalido';
+        $dados = array('msg' => 'nadaencontrado');
+        echo json_encode($dados);
     }
     die;
 }else{
-    $tpl = file_get_contents('layout/index.php');
+    $tpl = file_get_contents('tpls/Max-spc-serasa/index.html');
+    $tpl = str_replace(array("\n", "\r", "\t", "  "), '', $tpl);
     echo $tpl;
 }
 
-//print_r($res);
-
 die;
-
-
-
-
-// para CPF
-$tipo = "cpf";
-$documento = "340.406.926-91";
-$documento = '32900637805';
-// para CNPJ
-/*$tipo = "cnpj";
-$documento = "33.000.167/0001-01";*/
