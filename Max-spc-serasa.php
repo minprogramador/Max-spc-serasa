@@ -121,6 +121,7 @@ function filtrar($resultado) {
         $score = false;
     }
 
+
     if(array_key_exists('consultaSpcSerasa', $resultado)) {
         $consultaSpcSerasa = $resultado['consultaSpcSerasa'];
     }else{

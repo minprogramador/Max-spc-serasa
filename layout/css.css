@@ -28,6 +28,10 @@ table{
 	font-size: 1em;
 }
 
+#scoredv {
+	display: none;	
+}
+
 #filtro_cpf_span{
 	margin-left: 0.5%;
 	font-weight: normal;
