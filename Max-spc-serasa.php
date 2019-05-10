@@ -1,27 +1,68 @@
 <?php
 
+require_once('config.php');
+require_once("checkAuth.php");
+
+$NomeServico = 'max-spc-serasa';
+
+$servico = new Sistema_Servicos();
+$servico->setServico($NomeServico);
+
+$control = new Sistema_ControlGeral();
+$control->setServico($NomeServico);
+$control->setIdUser($_SESSION['getId']);
+
+if($control->Permissao() != true){
+    $msg = 'Você nao tem permissão para acessar esse serviço!';
+}else {
+    $a = $control->getLimites();
+    if($a['status'] != '1') {
+        $msg = 'Você não tem permissão para usar esse serviço.';
+    }
+    if($a['usado'] >= $a['limite']) {
+        $msg = 'Seu limite acabou, para adiquirir mais entre em contato!';
+    }
+}
+
+if($dads['status'] == '0') {
+    $msg = 'Indisponivel no momento!';
+}
+
+
+// if(!isset($msg)) {
+//     if(date('H') >= 23) {
+//         if(date('H') == 23) {
+//             if(date('i') >= 59) {
+//                 $msg = 'Horario de funcionamento, 08:00 até 23:59!';
+//             }
+//         }else{
+//             $msg = 'Horario de funcionamento, 08:00 até 23:59!';
+//         }
+//     }elseif(date('H') < 8) {
+//             $msg = 'Horario de funcionamento, 08:00 até 23:59!';
+//     }
+// }
+
+if(isset($msg)){
+    $tpl = file_get_contents('./tpls/Max-spc-serasa/msg.html');
+    $tpl = str_replace('{{msg}}', $msg, $tpl);
+    $tpl = str_replace(array("\n", "\r", "\t", "  ", "  "), '', $tpl);
+    echo $tpl;
+    die;
+}
+
 require('funcs.php');
 include('config.php');
 
 function saveLog($doc, $res) {
-    if(file_put_contents('./debug/'.$doc.'.log', $res)) {
+    $doc = time().'_'.$doc;
+    if(file_put_contents('Bin/cache_Max-spc-serasa/'.$doc.'.log', $res)) {
         return true;
     }
     return false;
 }
 
 function consultar($doc, $urltoken, $token) {
-
-    @$resultado = file_get_contents('debug/32900637805.log');
-
-    if(stristr($resultado, '{')) {
-        $resultado = json_decode($resultado, true);
-        $resultado = $resultado['data']['consultas'][10]['data'];
-        return $resultado;
-    }
-    return $resultado;
-
-    /*========================================*/
 
     if(!preg_match("#^([0-9]){3}([0-9]){3}([0-9]){3}([0-9]){2}$#i", $doc)){
         return 'doc_invalido';
@@ -63,6 +104,9 @@ function consultar($doc, $urltoken, $token) {
     curl_close($ch);
 
     saveLog($doc, $output);
+    if(stristr($output, 'correu alguma falha na consul')) {
+        return 'erro_desconhecido';
+    }
 
     if(!stristr($output, 'identificacao')) {
         return 'indisponivel';
@@ -211,18 +255,14 @@ function filtrar($resultado) {
     $dados = str_replace('{{nome}}', $nome, $dados);
     $dados = str_replace('{{data_de_nascimento}}', $data_de_nascimento, $dados);
     $dados = str_replace('{{nome_da_mae}}', $nome_da_mae, $dados);
-
     $dados = str_replace('{{endereco}}', $endereco, $dados);
     $dados = str_replace('{{bairro}}', $bairro, $dados);
     $dados = str_replace('{{cidade}}', $cidade, $dados);
     $dados = str_replace('{{uf}}', $uf, $dados);
     $dados = str_replace('{{cep}}', $cep, $dados);
-
     $dados = str_replace('{{endereco_anterior}}', $endAnt, $dados);
-
     $dados = str_replace('{{score.pontuacao}}', $scorepontos, $dados);
     $dados = str_replace('{{score.descricao}}', $score['descricao'], $dados);
-
     $dados = str_replace('{{ocorrenc}}', $ocorrenc, $dados);
     $dados = str_replace('{{consultaSpcSerasa}}', $consultaSpcSerasa, $dados);
     $dados = str_replace('{{pendenciasFinanceiraSerasa}}', $pendenciasFinanceiraSerasa, $dados);
@@ -234,33 +274,43 @@ function filtrar($resultado) {
 }
 
 if(isset($_POST['dados'])) {
-    $documento = '32900637805';
+
+    // $dados = array('msg' => 'nadaencontrado');
+    // $dados = array('msg' => 'reload');
+    // $dados = array('msg' => 'fail');
+    // $dados = array('msg' => 'invalido');
+
+    $documento = $_POST['dados'];
+    $documento = str_replace(array('.', ',', '-', '/', ' ', '_', "\t", "\n", "\r"), '', $documento);
     $resultado = consultar($documento, $urltoken, $token);
-    $dados     = filtrar($resultado);
-    
+    if($resultado == 'erro_desconhecido') {
+        $dados = array('msg' => 'fail');
+        echo json_encode($dados);
+        die;
+    }
+
+    $dados = filtrar($resultado);
+
     if($dados !== false) {
+        if(stristr($dados, 'IDENTIFICA')) {
+            $control->saveConsulta();
+            $comp = new Sistema_Verificacao();
+            $comp->setServico($NomeServico);
+            $comp->Computa();
+        }
+
         echo $dados;
     }else{
-        //print_r($resultado);
-        echo 'invalido';
+        $dados = array('msg' => 'nadaencontrado');
+        echo json_encode($dados);
     }
     die;
 }else{
-    $tpl = file_get_contents('layout/index.php');
+    $tpl = file_get_contents('tpls/Max-spc-serasa/index.html');
+    $tpl = str_replace(array("\n", "\r", "\t", "  "), '', $tpl);
+    $tpl = str_replace('<h6>LIMITE: <strong> 0</strong> - USADO: <strong> 0</strong></h6>', 
+        '<h6>LIMITE: <strong> '.$a['limite'].'</strong> - USADO: <strong> '.$a['usado'].'</strong></h6>', $tpl);
     echo $tpl;
 }
 
-//print_r($res);
-
 die;
-
-
-
-
-// para CPF
-$tipo = "cpf";
-$documento = "340.406.926-91";
-$documento = '32900637805';
-// para CNPJ
-/*$tipo = "cnpj";
-$documento = "33.000.167/0001-01";*/
